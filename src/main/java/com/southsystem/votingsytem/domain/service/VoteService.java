@@ -12,7 +12,8 @@ public class VoteService {
 
     private final SubjectVotingService votingService;
 
-    public void create(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
-        this.votingService.addVote(subjectId, vote);
+    public boolean create(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
+       var createdVote = this.votingService.addVote(subjectId, vote);
+       return createdVote != null;
     }
 }

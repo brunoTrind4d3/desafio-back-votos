@@ -12,7 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController()
 @RequestMapping("api/v1/vote")
@@ -22,10 +28,10 @@ public class VoteController {
     VoteService service;
 
     @PostMapping("/{subjectId}")
-    public ResponseEntity<HttpStatus> create(@PathVariable String subjectId, @RequestBody Vote body) throws SubjectVotingNotFoundException,
+    public ResponseEntity<HttpStatus> create(@PathVariable String subjectId, @Valid @RequestBody Vote body) throws SubjectVotingNotFoundException,
             SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
-        this.service.create(subjectId, body);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        var created = this.service.create(subjectId, body);
+        return created ? new ResponseEntity<>(HttpStatus.CREATED) : null;
     }
 
     @ExceptionHandler({SubjectVotingNotFoundException.class})
@@ -42,5 +48,18 @@ public class VoteController {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).contentType(MediaType.APPLICATION_JSON)
                 .body(BusinessError.builder().errorMessage(ex.getMessage())
                         .errorCode(HttpStatus.UNPROCESSABLE_ENTITY.value()).build());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }

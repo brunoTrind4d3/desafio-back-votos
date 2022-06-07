@@ -25,7 +25,7 @@ public class SubjectVotingRepositoryImpl implements SubjectVotingRepository {
     }
 
     @Override
-    public void addVote(SubjectVoting subject) {
-        this.repository.save(subject);
+    public SubjectVoting addVote(SubjectVoting subject) {
+        return this.repository.save(subject);
     }
 }

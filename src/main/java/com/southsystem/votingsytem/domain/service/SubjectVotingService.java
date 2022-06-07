@@ -37,23 +37,23 @@ public class SubjectVotingService {
         return result.get();
     }
 
-    public void addVote(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
+    public SubjectVoting addVote(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
         var result = this.findOne(subjectId);
         if (result.isClosed()) {
             throw new SubjectVotingClosedException("Voting subject is closed");
         }
-        if (this.eligibilityToVoteRepository.isEligible(vote.getTaxId())) {
-            var taxIdVoted = result.getVotes().stream().filter(f -> f.getTaxId().equals(vote.getTaxId())).findAny();
-            if (taxIdVoted.isPresent()) {
-                throw new TaxIdAlreadyVotedException("You already voted");
+        var taxIdVoted = result.getVotes().stream().filter(f -> f.getTaxId().equals(vote.getTaxId())).findAny();
+        if (taxIdVoted.isEmpty()) {
+            if (!this.eligibilityToVoteRepository.isEligible(vote.getTaxId())) {
+                throw new InvalidTaxIdException("You can't vote in this session");
             }
+            if (result.getVotes() == null) {
+                result.setVotes(List.of(vote));
+            } else {
+                result.getVotes().add(vote);
+            }
+             return this.repository.addVote(result);
         }
-        if(result.getVotes() == null){
-            result.setVotes(List.of(vote));
-        }else{
-            result.getVotes().add(vote);
-        }
-
-        this.repository.addVote(result);
+        throw new TaxIdAlreadyVotedException("You already voted");
     }
 }
