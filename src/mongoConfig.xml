@@ -1,8 +1,0 @@
-<mongo:mongo-client id="mongoClient" host="localhost" />
-<mongo:db-factory id="mongoDbFactory" dbname="test" mongo-client-ref="mongoClient" />
-
-<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-<constructor-arg ref="mongoDbFactory"/>
-</bean>
-
-<mongo:repositories base-package="com.southsystem.votingsytem.repository.mongo" mongo-template-ref="mongoTemplate"/>
