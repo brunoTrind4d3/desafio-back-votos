@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      user: southsystem
+      password: teste
+      uri: mongodb+srv://southsystem:teste@southsystem-application.bvk8x.mongodb.net/?retryWrites=true&w=majority
+      database: southsystem
+eligibility:
+  url: https://user-info.herokuapp.com
