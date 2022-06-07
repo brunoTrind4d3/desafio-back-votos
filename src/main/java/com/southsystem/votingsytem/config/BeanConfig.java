@@ -2,6 +2,8 @@ package com.southsystem.votingsytem.config;
 
 import com.southsystem.votingsytem.domain.repository.EligibilityToVoteRepository;
 import com.southsystem.votingsytem.domain.repository.SubjectVotingRepository;
+import com.southsystem.votingsytem.domain.service.CalculateResultsService;
+import com.southsystem.votingsytem.domain.service.ExpiredSessionsService;
 import com.southsystem.votingsytem.domain.service.SubjectVotingService;
 import com.southsystem.votingsytem.domain.service.VoteService;
 import org.springframework.context.annotation.Bean;
@@ -18,5 +20,15 @@ public class BeanConfig {
     @Bean
     VoteService voteService(SubjectVotingService service) {
         return new VoteService(service);
+    }
+
+    @Bean
+    ExpiredSessionsService expiredSessionsService(SubjectVotingService service, CalculateResultsService calculateResultsService){
+        return new ExpiredSessionsService(service, calculateResultsService);
+    }
+
+    @Bean
+    CalculateResultsService calculateResultsService(){
+        return new CalculateResultsService();
     }
 }

@@ -10,9 +10,7 @@ import com.southsystem.votingsytem.domain.repository.EligibilityToVoteRepository
 import com.southsystem.votingsytem.domain.repository.SubjectVotingRepository;
 import lombok.AllArgsConstructor;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 public class SubjectVotingService {
@@ -22,9 +20,11 @@ public class SubjectVotingService {
 
     public SubjectVoting create(SubjectVoting subject) {
         if (subject.getId() == null) {
+            var createdAt = new Date();
             subject.setId(UUID.randomUUID().toString());
-            subject.setCreatedAt(new Date());
+            subject.setCreatedAt(createdAt);
             subject.setClosed(false);
+            subject.setFinishedAt(getExpirationDate(subject.getDuration(), createdAt));
         }
         return this.repository.create(subject);
     }
@@ -37,12 +37,17 @@ public class SubjectVotingService {
         return result.get();
     }
 
+    public void update(SubjectVoting subject) {
+        this.repository.update(subject);
+    }
+
     public SubjectVoting addVote(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
         var result = this.findOne(subjectId);
         if (result.isClosed()) {
             throw new SubjectVotingClosedException("Voting subject is closed");
         }
-        var taxIdVoted = result.getVotes().stream().filter(f -> f.getTaxId().equals(vote.getTaxId())).findAny();
+        var taxIdVoted = Optional.ofNullable(result.getVotes()).orElse(new ArrayList<>()).stream()
+                .filter(f -> f.getTaxId().equals(vote.getTaxId())).findAny();
         if (taxIdVoted.isEmpty()) {
             if (!this.eligibilityToVoteRepository.isEligible(vote.getTaxId())) {
                 throw new InvalidTaxIdException("You can't vote in this session");
@@ -52,8 +57,19 @@ public class SubjectVotingService {
             } else {
                 result.getVotes().add(vote);
             }
-             return this.repository.addVote(result);
+            return this.repository.addVote(result);
         }
         throw new TaxIdAlreadyVotedException("You already voted");
+    }
+
+    private Date getExpirationDate(Integer duration, Date createdAt) {
+        var newDate = Calendar.getInstance();
+        newDate.setTime(createdAt);
+        newDate.add(Calendar.MINUTE, Objects.requireNonNullElse(duration, 1));
+        return newDate.getTime();
+    }
+
+    public List<String> findExpiredSessions(Date expirationDate) {
+        return this.repository.findExpiredSessions(expirationDate);
     }
 }

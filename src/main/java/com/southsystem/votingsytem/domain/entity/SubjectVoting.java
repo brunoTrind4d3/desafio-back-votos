@@ -19,9 +19,10 @@ public class SubjectVoting {
     private String description;
     private Integer duration;
     private boolean isClosed;
-    private String result;
 
+    private Result results;
     private List<Vote> votes;
 
     private Date createdAt;
+    private Date finishedAt;
 }
