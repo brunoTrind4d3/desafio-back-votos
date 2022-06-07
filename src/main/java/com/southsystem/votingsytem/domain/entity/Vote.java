@@ -18,5 +18,5 @@ public class Vote {
     private String taxId;
 
     @NotNull(message = "candidate is mandatory")
-    private boolean candidate;
+    private Boolean candidate;
 }
