@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public class SessionVotingNotifyRepositoryImpl implements SessionVotingNotifyRepository {
 
     @Autowired
-    private EndVotingSessionRepository kafkaNotification;
+    EndVotingSessionRepository kafkaNotification;
 
     @Override
     public void notify(SubjectVoting subject) {

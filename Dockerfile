@@ -13,6 +13,8 @@ WORKDIR /opt/app
 COPY --from=dependencies /root/.m2 /root/.m2
 COPY --from=dependencies /opt/app /opt/app
 
+COPY ./src /opt/app/src
+
 RUN mvn -B -e clean package
 
 FROM ${RUNTIME_IMAGE}

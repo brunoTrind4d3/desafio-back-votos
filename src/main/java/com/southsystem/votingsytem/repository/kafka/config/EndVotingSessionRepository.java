@@ -1,6 +1,7 @@
 package com.southsystem.votingsytem.repository.kafka.config;
 
 import com.southsystem.votingsytem.domain.entity.SubjectVoting;
+import com.southsystem.votingsytem.repository.kafka.config.AbstractRepositoryKafka;
 import org.springframework.stereotype.Repository;
 
 @Repository

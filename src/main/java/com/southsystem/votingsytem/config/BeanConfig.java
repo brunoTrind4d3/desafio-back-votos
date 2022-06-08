@@ -1,6 +1,7 @@
 package com.southsystem.votingsytem.config;
 
 import com.southsystem.votingsytem.domain.repository.EligibilityToVoteRepository;
+import com.southsystem.votingsytem.domain.repository.SessionVotingNotifyRepository;
 import com.southsystem.votingsytem.domain.repository.SubjectVotingRepository;
 import com.southsystem.votingsytem.domain.service.CalculateResultsService;
 import com.southsystem.votingsytem.domain.service.ExpiredSessionsService;
@@ -23,8 +24,10 @@ public class BeanConfig {
     }
 
     @Bean
-    ExpiredSessionsService expiredSessionsService(SubjectVotingService service, CalculateResultsService calculateResultsService){
-        return new ExpiredSessionsService(service, calculateResultsService);
+    ExpiredSessionsService expiredSessionsService(SubjectVotingService service,
+                                                  CalculateResultsService calculateResultsService,
+                                                  SessionVotingNotifyRepository sessionVotingNotifyRepository){
+        return new ExpiredSessionsService(service, calculateResultsService, sessionVotingNotifyRepository);
     }
 
     @Bean

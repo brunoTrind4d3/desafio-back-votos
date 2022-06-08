@@ -18,7 +18,7 @@ public abstract class AbstractRepositoryKafka<T> {
     private static final String MESSAGE_BODY = "messageBody";
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    KafkaTemplate<String, String> kafkaTemplate;
 
     protected abstract String getTopicName();
 
