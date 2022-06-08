@@ -32,19 +32,19 @@ public class EligibilityToVoteRepositoryImpl implements EligibilityToVoteReposit
             Response resp = null;
             resp = this.eligibilityToVoteFeignClient.getEligibilityToVote(cpf);
 
-            log.info("REQUEST", kv("path", resp.request().url()));
+            log.info("REQUEST {}", kv("path", resp.request().url()));
             if (resp.status() == HttpStatus.OK.value()) {
-                log.info("RESPONSE", kv("body", resp.body().toString()), kv("status", String.valueOf(resp.status())));
                 var builder = new GsonBuilder();
                 var decoder = new GsonDecoder(builder.create());
                 EligibilityModel response = null;
                 response = (EligibilityModel) decoder.decode(resp, EligibilityModel.class);
+                log.info("RESPONSE {},{}", kv("body", response), kv("status", String.valueOf(resp.status())));
                 return ABLE_TO_VOTE.equals(response.getStatus());
             }else if(resp.status() == HttpStatus.NOT_FOUND.value()){
                 throw new InvalidTaxIdException("taxId not found");
             }
         } catch (IOException e) {
-            log.error("RESPONSE", kv("ERROR", e.getMessage()));
+            log.error("RESPONSE {}", kv("ERROR", e.getMessage()));
         }
         return false;
     }

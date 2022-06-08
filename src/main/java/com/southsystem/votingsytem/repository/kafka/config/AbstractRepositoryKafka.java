@@ -15,28 +15,27 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 public abstract class AbstractRepositoryKafka<T> {
 
     private static final String TOPIC_NAME = "topicName";
-    private static final String MESSAGE_BODY = "messageBody";
 
     @Autowired
-    KafkaTemplate<String, String> kafkaTemplate;
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     protected abstract String getTopicName();
 
     public void notify(T entity){
 
         var topicName = this.getTopicName();
-        var message = entity.toString();
 
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, message);
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicName, entity);
+        future.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onFailure(Throwable ex) {
-                log.error("KAFKA notification error", kv(TOPIC_NAME, topicName), kv("exception", Optional.of(ex).map(Throwable::getMessage)
+                log.error("KAFKA notification error {}, {}", kv(TOPIC_NAME, topicName), kv("exception", Optional.of(ex).map(Throwable::getMessage)
                         .orElse("")));
             }
+
             @Override
-            public void onSuccess(SendResult<String, String> result) {
-                log.info("KAFKA notification success", kv(TOPIC_NAME, topicName));
+            public void onSuccess(SendResult<String, Object> result) {
+                log.info("KAFKA notification success {}", kv(TOPIC_NAME, topicName));
             }
         });
     }
