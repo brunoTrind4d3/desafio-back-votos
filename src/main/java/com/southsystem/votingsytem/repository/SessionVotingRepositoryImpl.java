@@ -1,9 +1,8 @@
 package com.southsystem.votingsytem.repository;
 
-import com.mongodb.BasicDBObject;
-import com.southsystem.votingsytem.domain.entity.SubjectVoting;
-import com.southsystem.votingsytem.domain.repository.SubjectVotingRepository;
-import com.southsystem.votingsytem.repository.mongo.SubjectVotingMongoRepository;
+import com.southsystem.votingsytem.domain.entity.SessionVoting;
+import com.southsystem.votingsytem.domain.repository.SessionVotingRepository;
+import com.southsystem.votingsytem.repository.mongo.SessionVotingMongoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,28 +15,28 @@ import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
-public class SubjectVotingRepositoryImpl implements SubjectVotingRepository {
+public class SessionVotingRepositoryImpl implements SessionVotingRepository {
 
     @Autowired
-    SubjectVotingMongoRepository repository;
+    SessionVotingMongoRepository repository;
 
     @Override
-    public SubjectVoting create(SubjectVoting subject) {
+    public SessionVoting create(SessionVoting subject) {
         return this.repository.insert(subject);
     }
 
     @Override
-    public void update(SubjectVoting subject) {
+    public void update(SessionVoting subject) {
         this.repository.save(subject);
     }
 
     @Override
-    public Optional<SubjectVoting> findOne(String id) {
+    public Optional<SessionVoting> findOne(String id) {
         return this.repository.findById(id);
     }
 
     @Override
-    public SubjectVoting addVote(SubjectVoting subject) {
+    public SessionVoting addVote(SessionVoting subject) {
         return this.repository.save(subject);
     }
 
@@ -47,7 +46,7 @@ public class SubjectVotingRepositoryImpl implements SubjectVotingRepository {
         if(result.isEmpty()){
             return new ArrayList<>();
         }
-        var ids = result.stream().map(SubjectVoting::getId).collect(Collectors.toList());
+        var ids = result.stream().map(SessionVoting::getId).collect(Collectors.toList());
         log.info("EXPIRED SESSIONS IDs: {}", ids);
         return ids;
     }

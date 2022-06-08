@@ -1,11 +1,11 @@
 package com.southsystem.votingsytem.rest.v1;
 
 import com.southsystem.votingsytem.domain.entity.BusinessError;
-import com.southsystem.votingsytem.domain.entity.SubjectVoting;
+import com.southsystem.votingsytem.domain.entity.SessionVoting;
 import com.southsystem.votingsytem.domain.exception.SubjectVotingNotFoundException;
-import com.southsystem.votingsytem.domain.service.SubjectVotingService;
-import com.southsystem.votingsytem.rest.mapper.SubjectVotingMapper;
-import com.southsystem.votingsytem.rest.model.CreateSubjectVoting;
+import com.southsystem.votingsytem.domain.service.SessionVotingService;
+import com.southsystem.votingsytem.rest.mapper.SessionVotingMapper;
+import com.southsystem.votingsytem.rest.model.CreateSessionVoting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,19 +20,19 @@ import java.util.Map;
 
 @RestController()
 @RequestMapping("/api/v1/subject")
-public class SubjectVotingController {
+public class SessionVotingController {
 
     @Autowired
-    SubjectVotingService service;
+    SessionVotingService service;
 
     @GetMapping("/{id}")
-    public SubjectVoting findOne(@PathVariable String id) throws SubjectVotingNotFoundException {
+    public SessionVoting findOne(@PathVariable String id) throws SubjectVotingNotFoundException {
         return this.service.findOne(id);
     }
 
     @PostMapping()
-    public SubjectVoting create(@Valid @RequestBody CreateSubjectVoting subject) {
-        return this.service.create(SubjectVotingMapper.from(subject));
+    public SessionVoting create(@Valid @RequestBody CreateSessionVoting subject) {
+        return this.service.create(SessionVotingMapper.from(subject));
     }
 
     @ExceptionHandler({SubjectVotingNotFoundException.class})

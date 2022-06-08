@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubjectVoting {
+public class SessionVoting {
     @Id
     private String id;
     private String description;

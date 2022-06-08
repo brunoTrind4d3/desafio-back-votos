@@ -11,7 +11,7 @@ import java.util.Date;
 @Slf4j
 public class ExpiredSessionsService {
 
-    private final SubjectVotingService service;
+    private final SessionVotingService service;
     private final CalculateResultsService calculateResultsService;
     private final SessionVotingNotifyRepository notifyRepository;
 

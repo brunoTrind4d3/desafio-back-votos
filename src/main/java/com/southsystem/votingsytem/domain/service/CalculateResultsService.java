@@ -1,7 +1,7 @@
 package com.southsystem.votingsytem.domain.service;
 
 import com.southsystem.votingsytem.domain.entity.Result;
-import com.southsystem.votingsytem.domain.entity.SubjectVoting;
+import com.southsystem.votingsytem.domain.entity.SessionVoting;
 import com.southsystem.votingsytem.domain.entity.Vote;
 
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ public class CalculateResultsService {
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
 
 
-    public Result calculate(SubjectVoting subject) {
+    public Result calculate(SessionVoting subject) {
         var votes = Optional.ofNullable(subject.getVotes()).orElse(new ArrayList<>());
         var yesVotes = (int) votes.stream()
                 .filter(Vote::getCandidate).count();

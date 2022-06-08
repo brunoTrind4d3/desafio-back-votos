@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 @Data
-public class CreateSubjectVoting {
+public class CreateSessionVoting {
 
     @NotBlank(message = "description is mandatory")
     private String description;

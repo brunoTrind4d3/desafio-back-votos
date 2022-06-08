@@ -1,24 +1,21 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   data:
     mongodb:
       user: southsystem
       password: teste
       uri: mongodb+srv://southsystem:teste@southsystem-application.bvk8x.mongodb.net/?retryWrites=true&w=majority
       database: southsystem
-  kafka:
-    consumer:
-      group-id: tpd-loggers
-      auto-offset-reset: earliest
-    bootstrap-servers: kafka:9092
-    producer:
-      batch-size: 10000
-      request:
-        timeout:
-          ms: 50000
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+rabbitmq:
+  exchange: exchange
+  queue: queue
+  routingkey: routingkey
 
-
-tpd:
-  topic-name: advice-topic
-  messages-per-request: 10
 eligibility:
   url: https://user-info.herokuapp.com

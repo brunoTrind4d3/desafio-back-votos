@@ -1,9 +1,9 @@
 package com.southsystem.votingsytem.repository;
 
-import com.southsystem.votingsytem.domain.entity.SubjectVoting;
+import com.southsystem.votingsytem.domain.entity.SessionVoting;
 import com.southsystem.votingsytem.domain.repository.SessionVotingNotifyRepository;
-import com.southsystem.votingsytem.repository.kafka.config.EndVotingSessionRepository;
-import com.southsystem.votingsytem.repository.kafka.mapper.KafkaMessageMapper;
+import com.southsystem.votingsytem.repository.rabbitmq.RabbitMQMessageMapper;
+import com.southsystem.votingsytem.repository.rabbitmq.RabbitMQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 public class SessionVotingNotifyRepositoryImpl implements SessionVotingNotifyRepository {
 
     @Autowired
-    EndVotingSessionRepository kafkaNotification;
+    RabbitMQSender sender;
 
     @Override
-    public void notify(SubjectVoting subject) {
-        this.kafkaNotification.notify(KafkaMessageMapper.from(subject));
+    public void notify(SessionVoting subject) {
+        this.sender.send(RabbitMQMessageMapper.from(subject));
     }
 }

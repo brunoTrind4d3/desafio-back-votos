@@ -1,24 +1,24 @@
 package com.southsystem.votingsytem.domain.service;
 
-import com.southsystem.votingsytem.domain.entity.SubjectVoting;
+import com.southsystem.votingsytem.domain.entity.SessionVoting;
 import com.southsystem.votingsytem.domain.entity.Vote;
 import com.southsystem.votingsytem.domain.exception.InvalidTaxIdException;
 import com.southsystem.votingsytem.domain.exception.SubjectVotingClosedException;
 import com.southsystem.votingsytem.domain.exception.SubjectVotingNotFoundException;
 import com.southsystem.votingsytem.domain.exception.TaxIdAlreadyVotedException;
 import com.southsystem.votingsytem.domain.repository.EligibilityToVoteRepository;
-import com.southsystem.votingsytem.domain.repository.SubjectVotingRepository;
+import com.southsystem.votingsytem.domain.repository.SessionVotingRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.*;
 
 @AllArgsConstructor
-public class SubjectVotingService {
+public class SessionVotingService {
 
-    private final SubjectVotingRepository repository;
+    private final SessionVotingRepository repository;
     private final EligibilityToVoteRepository eligibilityToVoteRepository;
 
-    public SubjectVoting create(SubjectVoting subject) {
+    public SessionVoting create(SessionVoting subject) {
         if (subject.getId() == null) {
             var createdAt = new Date();
             subject.setId(UUID.randomUUID().toString());
@@ -29,7 +29,7 @@ public class SubjectVotingService {
         return this.repository.create(subject);
     }
 
-    public SubjectVoting findOne(String id) throws SubjectVotingNotFoundException {
+    public SessionVoting findOne(String id) throws SubjectVotingNotFoundException {
         var result = this.repository.findOne(id);
         if (result.isEmpty()) {
             throw new SubjectVotingNotFoundException("Subject voting does not exists");
@@ -37,11 +37,11 @@ public class SubjectVotingService {
         return result.get();
     }
 
-    public void update(SubjectVoting subject) {
+    public void update(SessionVoting subject) {
         this.repository.update(subject);
     }
 
-    public SubjectVoting addVote(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
+    public SessionVoting addVote(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
         var result = this.findOne(subjectId);
         if (result.isClosed()) {
             throw new SubjectVotingClosedException("Voting subject is closed");

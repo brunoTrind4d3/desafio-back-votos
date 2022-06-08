@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class VoteService {
 
-    private final SubjectVotingService votingService;
+    private final SessionVotingService votingService;
 
     public boolean create(String subjectId, Vote vote) throws SubjectVotingNotFoundException, SubjectVotingClosedException, InvalidTaxIdException, TaxIdAlreadyVotedException {
        var createdVote = this.votingService.addVote(subjectId, vote);
