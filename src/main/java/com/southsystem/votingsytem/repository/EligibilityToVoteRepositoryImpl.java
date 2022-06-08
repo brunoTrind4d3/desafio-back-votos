@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 
+import static net.logstash.logback.argument.StructuredArguments.kv;
 import static net.logstash.logback.marker.Markers.append;
 
 @Slf4j
@@ -31,9 +32,9 @@ public class EligibilityToVoteRepositoryImpl implements EligibilityToVoteReposit
             Response resp = null;
             resp = this.eligibilityToVoteFeignClient.getEligibilityToVote(cpf);
 
-            log.info("REQUEST", append("path", resp.request().url()));
+            log.info("REQUEST", kv("path", resp.request().url()));
             if (resp.status() == HttpStatus.OK.value()) {
-                log.info("RESPONSE", append("body", resp.body().toString()), append("status", String.valueOf(resp.status())));
+                log.info("RESPONSE", kv("body", resp.body().toString()), kv("status", String.valueOf(resp.status())));
                 var builder = new GsonBuilder();
                 var decoder = new GsonDecoder(builder.create());
                 EligibilityModel response = null;
@@ -43,7 +44,7 @@ public class EligibilityToVoteRepositoryImpl implements EligibilityToVoteReposit
                 throw new InvalidTaxIdException("taxId not found");
             }
         } catch (IOException e) {
-            log.error("RESPONSE", append("ERROR", e.getMessage()));
+            log.error("RESPONSE", kv("ERROR", e.getMessage()));
         }
         return false;
     }

@@ -5,5 +5,16 @@ spring:
       password: teste
       uri: mongodb+srv://southsystem:teste@southsystem-application.bvk8x.mongodb.net/?retryWrites=true&w=majority
       database: southsystem
+  kafka:
+    consumer:
+      group-id: tpd-loggers
+      auto-offset-reset: earliest
+    # change this property if you are using your own
+    # Kafka cluster or your Docker IP is different
+    bootstrap-servers: localhost:9092
+
+tpd:
+  topic-name: advice-topic
+  messages-per-request: 10
 eligibility:
   url: https://user-info.herokuapp.com
