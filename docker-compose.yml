@@ -2,15 +2,18 @@ version: '3'
 services:
   voting-system:
     container_name: voting-system
+    depends_on:
+      - rabbitmq
     build:
       context: .
       dockerfile: Dockerfile
     image: voting-system:latest
     ports:
       - "8080:8080"
+    links:
+      - rabbitmq
   rabbitmq:
     image: rabbitmq:3.8.3-management-alpine
-    hostname: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest

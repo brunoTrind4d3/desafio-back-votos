@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController()
-@RequestMapping("/api/v1/subject")
+@RequestMapping("/api/v1/session-voting")
 public class SessionVotingController {
 
     @Autowired
