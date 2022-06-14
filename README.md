@@ -10,6 +10,9 @@
 <h3>Documentação da API</h3>
 <p>Swagger: http://localhost:8080/swagger-ui/index.html#/ </p>
 
+<h3>Testes unitários</h3>
+<p>Foram adicionados somente alguns testes para verificação de conhecimento</p>
+
 <h3>Explicação dos campos</h3>
 <p>Para criar uma nova sessão eleitoral acesse o método POST/api/v1/session-voting</p>
 <ul>
